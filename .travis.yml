@@ -1,0 +1,32 @@
+language: java
+jdk:
+  - oraclejdk8
+env:
+  global:
+    - "FTP_USER=dosjung"
+    - "FTP_PASSWORD=Jgriffin1367!"
+    - "WAR_FILE_NAME=SpringMVCHibernate"
+    - "WAR_FILE_PATH=./build/libs/"
+#    - "WAR_FILE_NAME=testProject.war"
+#    - "WAR_FILE_PATH=./build/libs/"
+    - "DEPLOY_FLAG=testProject.deploy.complete"
+    - "DEPLOY_FLAG_PATH=./"
+install: true
+script:
+  - ./gradlew build
+  - ./gradlew task copyTask
+#after_success:
+#  - "curl --ftp-create-dirs -T $WAR_FILE_PATH$WAR_FILE_NAME -u $FTP_USER:$FTP_PASSWORD ftp://52.79.87.80"
+#  - "curl --ftp-create-dirs -T $DEPLOY_FLAG_PATH$DEPLOY_FLAG -u $FTP_USER:$FTP_PASSWORD ftp://52.79.87.80"
+
+deploy:
+  provider: s3
+  access_key_id: "AKIAJKQCSR3QMBBOGW5Q"
+  secret_access_key: "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"
+  bucket: "s3.freesiads.com"
+  file_glob: true
+  file: "./build/libs/*"
+  skip_cleanup: true
+  local_dir: build
+  region: 'ap-northeast-2'
+  
